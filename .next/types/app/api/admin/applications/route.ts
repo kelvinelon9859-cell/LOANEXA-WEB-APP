@@ -1,4 +1,4 @@
-// File: C:\Users\Administrator\Desktop\PROJECTS\LOANEXA_WEB APP\app\api\admin\applications\route.ts
+// File: E:\Development\LOANEXA WEB APP\LOANEXA-WEB-APP\app\api\admin\applications\route.ts
 import * as entry from '../../../../../../app/api/admin/applications/route.js'
 import type { NextRequest } from 'next/server.js'
 

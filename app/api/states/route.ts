@@ -63,6 +63,9 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@/utils/supabase/server';
 
+// FORCE DYNAMIC: Prevents Next.js build errors when calling cookies via Supabase
+export const dynamic = 'force-dynamic';
+
 const US_STATES_FALLBACK = [
   { state_code: 'AL', state_name: 'Alabama' },
   { state_code: 'AK', state_name: 'Alaska' },

@@ -1,0 +1,16 @@
+"use strict";(()=>{var e={};e.id=689,e.ids=[689],e.modules={399:e=>{e.exports=require("next/dist/compiled/next-server/app-page.runtime.prod.js")},517:e=>{e.exports=require("next/dist/compiled/next-server/app-route.runtime.prod.js")},8112:(e,t,r)=>{r.r(t),r.d(t,{originalPathname:()=>P,patchFetch:()=>w,requestAsyncStorage:()=>h,routeModule:()=>f,serverHooks:()=>x,staticGenerationAsyncStorage:()=>A});var s={};r.r(s),r.d(s,{GET:()=>m,PATCH:()=>E,dynamic:()=>u});var a=r(9303),n=r(8716),o=r(670),i=r(7070),p=r(9793);let u="force-dynamic",c=process.env.SUPABASE_SERVICE_ROLE_KEY||"sb_publishable_faJrHDhrz3DFwUEuLSAZTA_0YS9ejC_",l=(0,p.eI)("https://rjcqudwnsuqyqwcwwuwo.supabase.co",c);async function d(e){let t=e.headers.get("Authorization");if(!t)return null;let r=t.replace("Bearer ",""),{data:{user:s},error:a}=await l.auth.getUser(r);return a||!s?null:s}async function m(e,{params:t}){try{if(!await d(e))return i.NextResponse.json({error:"Unauthorized access"},{status:401});let{id:r}=await t;if(!r)return i.NextResponse.json({error:"Missing application ID"},{status:400});let{data:s,error:a}=await l.from("applications").select(`
+        id,
+        income,
+        loan_amount,
+        loan_term_months,
+        loan_purpose,
+        status,
+        transaction_reference,
+        created_at,
+        users (
+          full_name,
+          email,
+          phone,
+          state
+        )
+      `).eq("id",r).single();if(a||!s)return console.error("API Fetch Error:",a?.message),i.NextResponse.json({error:"Application not found"},{status:404});return i.NextResponse.json(s)}catch(e){return console.error("API Catch Error:",e),i.NextResponse.json({error:"Internal Server Error"},{status:500})}}async function E(e,{params:t}){try{if(!await d(e))return i.NextResponse.json({error:"Unauthorized access"},{status:401});let{id:r}=await t,{status:s,transaction_reference:a}=await e.json(),n={updated_at:new Date().toISOString()};if(s){let e=s.trim().toUpperCase();if(!["APPROVED","REJECTED","PENDING"].includes(e))return i.NextResponse.json({error:"Invalid status provided"},{status:400});n.status=e}void 0!==a&&(n.transaction_reference=a);let{data:o,error:p}=await l.from("applications").update(n).eq("id",r).select().single();if(p)return console.error("Update Error:",p.message),i.NextResponse.json({error:p.message},{status:500});return i.NextResponse.json({success:!0,application:o})}catch(e){return console.error("API Error:",e),i.NextResponse.json({error:"Internal Server Error"},{status:500})}}let f=new a.AppRouteRouteModule({definition:{kind:n.x.APP_ROUTE,page:"/api/applications/[id]/route",pathname:"/api/applications/[id]",filename:"route",bundlePath:"app/api/applications/[id]/route"},resolvedPagePath:"E:\\Development\\LOANEXA WEB APP\\LOANEXA-WEB-APP\\app\\api\\applications\\[id]\\route.ts",nextConfigOutput:"",userland:s}),{requestAsyncStorage:h,staticGenerationAsyncStorage:A,serverHooks:x}=f,P="/api/applications/[id]/route";function w(){return(0,o.patchFetch)({serverHooks:x,staticGenerationAsyncStorage:A})}}};var t=require("../../../../webpack-runtime.js");t.C(e);var r=e=>t(t.s=e),s=t.X(0,[276,903,972],()=>r(8112));module.exports=s})();

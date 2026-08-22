@@ -158,24 +158,62 @@
 // }
 
 
-
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { createServerClient } from '@supabase/ssr';
+import { cookies } from 'next/headers';
 
 export async function POST(req: Request) {
   try {
-    // Initialize Supabase with the service role key to bypass session permissions for intake
-    const supabase = createClient(
+    const cookieStore = await cookies();
+
+    // 1. Create client to fetch logged-in user session
+    const supabaseAuth = createServerClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      {
+        cookies: {
+          getAll() {
+            return cookieStore.getAll();
+          },
+          setAll(cookiesToSet) {
+            try {
+              cookiesToSet.forEach(({ name, value, options }) =>
+                cookieStore.set(name, value, options)
+              );
+            } catch {
+              // Middleware handles setting cookies in edge runtime if needed
+            }
+          },
+        },
+      }
+    );
+
+    // Get current authenticated user
+    const {
+      data: { user },
+      error: authError,
+    } = await supabaseAuth.auth.getUser();
+
+    if (authError || !user || !user.email) {
+      return NextResponse.json(
+        { error: 'Unauthorized: You must be logged in to submit an application.' },
+        { status: 401 }
+      );
+    }
+
+    // 2. Initialize Service Role Client for database writes
+    const supabaseAdmin = createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.SUPABASE_SERVICE_ROLE_KEY!
     );
-    
+
     const body = await req.json();
 
-    // 1. Upsert user into the 'users' table
+    // 3. Upsert user into the 'users' table (using authenticated user.email)
     const userData = {
       full_name: body.fullName?.trim(),
-      email: body.email?.trim(),
+      email: user.email, // <--- Securely pulled from auth session!
       phone: body.phone?.trim(),
       dob: body.dob,
       address: body.streetAddress?.trim(),
@@ -184,7 +222,7 @@ export async function POST(req: Request) {
       zip: body.zipCode?.trim(),
     };
 
-    const { data: userRecord, error: userError } = await supabase
+    const { data: userRecord, error: userError } = await supabaseAdmin
       .from('users')
       .upsert(userData, { onConflict: 'email' })
       .select('id')
@@ -198,7 +236,7 @@ export async function POST(req: Request) {
     const userId = userRecord.id;
     const applicationId = 'LN-2026-' + Math.floor(1000 + Math.random() * 9000);
 
-    // 2. Insert into 'applications' table
+    // 4. Insert into 'applications' table
     const applicationData = {
       id: applicationId,
       user_id: userId,
@@ -214,7 +252,7 @@ export async function POST(req: Request) {
       status: 'pending',
     };
 
-    const { data: appRecord, error: appError } = await supabase
+    const { data: appRecord, error: appError } = await supabaseAdmin
       .from('applications')
       .insert([applicationData])
       .select('id')
@@ -228,6 +266,9 @@ export async function POST(req: Request) {
     return NextResponse.json({ success: true, id: appRecord.id });
   } catch (err: any) {
     console.error('Critical apply route error:', err);
-    return NextResponse.json({ error: 'Internal Server Error', detail: err.message }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Internal Server Error', detail: err.message },
+      { status: 500 }
+    );
   }
 }

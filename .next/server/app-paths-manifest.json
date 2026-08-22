@@ -1,6 +1,27 @@
 {
   "/_not-found/page": "app/_not-found/page.js",
+  "/api/admin/applications/[id]/send-code/route": "app/api/admin/applications/[id]/send-code/route.js",
+  "/api/applications/[id]/verify/route": "app/api/applications/[id]/verify/route.js",
+  "/api/auth/login/route": "app/api/auth/login/route.js",
+  "/forgot-password/page": "app/forgot-password/page.js",
+  "/api/auth/user/route": "app/api/auth/user/route.js",
+  "/apply/page": "app/apply/page.js",
+  "/api/auth/signup/route": "app/api/auth/signup/route.js",
+  "/login/page": "app/login/page.js",
+  "/reset-password/page": "app/reset-password/page.js",
+  "/track/page": "app/track/page.js",
+  "/api/admin/applications/route": "app/api/admin/applications/route.js",
+  "/status/page": "app/status/page.js",
   "/page": "app/page.js",
+  "/api/admin/applications/[id]/route": "app/api/admin/applications/[id]/route.js",
+  "/api/applications/[id]/route": "app/api/applications/[id]/route.js",
+  "/api/auth/underwriter/callback/route": "app/api/auth/underwriter/callback/route.js",
+  "/api/apply/route": "app/api/apply/route.js",
+  "/api/auth/callback/route": "app/api/auth/callback/route.js",
+  "/api/applications/route": "app/api/applications/route.js",
+  "/api/states/route": "app/api/states/route.js",
+  "/underwriter/page": "app/underwriter/page.js",
   "/admin/page": "app/admin/page.js",
-  "/api/admin/applications/route": "app/api/admin/applications/route.js"
+  "/admin/applications/[id]/page": "app/admin/applications/[id]/page.js",
+  "/admin/applications/page": "app/admin/applications/page.js"
 }

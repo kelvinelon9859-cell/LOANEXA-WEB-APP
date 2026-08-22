@@ -1,4 +1,4 @@
-// File: C:\Users\Administrator\Desktop\PROJECTS\LOANEXA_WEB APP\app\layout.tsx
+// File: E:\Development\LOANEXA WEB APP\LOANEXA-WEB-APP\app\layout.tsx
 import * as entry from '../../../app/layout.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

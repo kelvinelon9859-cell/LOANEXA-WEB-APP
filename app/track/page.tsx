@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -31,7 +31,7 @@ interface TrackingResult {
   createdAt: string;
 }
 
-export default function LoanexaLandingAndTrack() {
+function LoanexaLandingAndTrackContent() {
   const searchParams = useSearchParams();
   
   // Amortization Calculator State
@@ -376,7 +376,7 @@ export default function LoanexaLandingAndTrack() {
             <Search className="absolute left-3 top-3 w-4 h-4 text-slate-400" />
             <input 
               type="text" value={appId} onChange={(e) => setAppId(e.target.value)}
-              placeholder="LN-2026-XXXX" mercantile-identifier="true" required
+              placeholder="LN-2026-XXXX" required
               className="w-full bg-slate-50 pl-9 pr-4 py-2 rounded-lg border font-mono font-bold uppercase tracking-wider text-sm focus:outline-slate-800" 
             />
           </div>
@@ -442,5 +442,13 @@ export default function LoanexaLandingAndTrack() {
 
       <Footer />
     </div>
+  );
+}
+
+export default function LoanexaLandingAndTrack() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-slate-50 flex items-center justify-center font-mono text-xs text-slate-400">Loading tracking system...</div>}>
+      <LoanexaLandingAndTrackContent />
+    </Suspense>
   );
 }
